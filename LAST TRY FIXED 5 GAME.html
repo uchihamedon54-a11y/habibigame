@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Nadira & Habibi: Kasus Pembunuhan Guru</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #001510);
+            color: white;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(0, 5, 20, 0.85);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
+            position: relative;
+            border: 2px solid #4e54c8;
+            animation: glow 3s infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 15px rgba(78, 84, 200, 0.7); }
+            100% { box-shadow: 0 0 30px rgba(78, 84, 200, 0.9), 0 0 60px rgba(78, 84, 200, 0.5); }
+        }
+        
+        .header {
+            background: linear-gradient(to right, #141e30, #243b55);
+            padding: 25px;
+            text-align: center;
+            border-bottom: 3px solid #4e54c8;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #00a8ff;
+            animation: titleGlow 2s infinite alternate;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px #00a8ff; }
+            100% { text-shadow: 0 0 20px #00a8ff, 0 0 30px #007bff; }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a8deff;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .scene-container {
+            flex: 3;
+            padding: 30px;
+            position: relative;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230d1525"/><path d="M0 0L100 100M100 0L0 100" stroke="%231c2e4a" stroke-width="1"/></svg>');
+            background-size: cover;
+        }
+        
+        .characters {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .character {
+            text-align: center;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .character:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .character-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #4e54c8;
+            object-fit: cover;
+            background: linear-gradient(45deg, #ff9966, #ff5e62);
+            box-shadow: 0 0 20px rgba(255, 94, 98, 0.6);
+            padding: 5px;
+        }
+        
+        .character-name {
+            margin-top: 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffd166;
+            text-shadow: 0 0 5px rgba(255, 209, 102, 0.7);
+        }
+        
+        .dialogue-box {
+            background: rgba(0, 10, 30, 0.9);
+            border: 2px solid #4e54c8;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            position: relative;
+            min-height: 180px;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dialogue-text {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #e0f7ff;
+            margin-bottom: 25px;
+            min-height: 120px;
+        }
+        
+        .highlight {
+            color: #ffd166;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 209, 102, 0.5);
+        }
+        
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .choice-btn {
+            background: linear-gradient(to right, #4A00E0, #8E2DE2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .choice-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to right, #8E2DE2, #4A00E0);
+        }
+        
+        .choice-btn:active {
+            transform: translateY(0);
+        }
+        
+        .evidence-container {
+            flex: 1;
+            background: rgba(10, 20, 40, 0.7);
+            padding: 20px;
+            border-left: 2px solid #4e54c8;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #ffd166;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(255, 209, 102, 0.5);
+        }
+        
+        .evidence-list {
+            list-style-type: none;
+        }
+        
+        .evidence-item {
+            background: rgba(30, 40, 80, 0.5);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff5e62;
+            animation: slideIn 0.5s ease;
+            transition: all 0.3s ease;
+        }
+        
+        .evidence-item:hover {
+            transform: translateX(5px);
+            background: rgba(40, 50, 100, 0.7);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #a8deff;
+            border-top: 1px solid #4e54c8;
+        }
+        
+        .plot-twist {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+        
+        .plot-twist.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .twist-title {
+            font-size: 3rem;
+            color: #ff5e62;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 94, 98, 0.8);
+            animation: twistPulse 2s infinite;
+        }
+        
+        @keyframes twistPulse {
+            0% { transform: scale(1); text-shadow: 0 0 20px rgba(255, 94, 98, 0.8); }
+            50% { transform: scale(1.05); text-shadow: 0 0 30px rgba(255, 94, 98, 1); }
+            100% { transform: scale(1); text-shadow: 0 0 20px rgba(255, 94, 98, 0.8); }
+        }
+        
+        .twist-text {
+            font-size: 1.5rem;
+            max-width: 700px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #ffd166;
+        }
+        
+        .reveal-btn {
+            background: linear-gradient(to right, #ff5e62, #ff9966);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 94, 98, 0.6);
+        }
+        
+        .reveal-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 94, 98, 0.8);
+        }
+        
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 0.15em solid #ff5e62;
+            white-space: nowrap;
+            letter-spacing: 0.05em;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #ff5e62 }
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #4A00E0, #8E2DE2);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .evidence-container {
+                border-left: none;
+                border-top: 2px solid #4e54c8;
+            }
+            
+            .choices {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">Petualangan Nadira & Habibi</h1>
+            <p class="subtitle">Memecahkan Misteri Pembunuhan Guru Mereka - Pilihlah dengan Bijak!</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="scene-container">
+                <div class="characters">
+                    <div class="character">
+                        <div class="character-img"></div>
+                        <div class="character-name">Nadira</div>
+                    </div>
+                    <div class="character">
+                        <div class="character-img"></div>
+                        <div class="character-name">Habibi</div>
+                    </div>
+                </div>
+                
+                <div class="dialogue-box">
+                    <div class="dialogue-text" id="dialogue">
+                        <!-- Dialogue will be inserted here by JavaScript -->
+                    </div>
+                    
+                    <div class="choices" id="choices">
+                        <!-- Choice buttons will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="evidence-container">
+                <h2 class="section-title">Bukti Dikumpulkan</h2>
+                <ul class="evidence-list" id="evidence-list">
+                    <li class="evidence-item">Tidak ada bukti yang dikumpulkan</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Game Interaktif &copy; 2023 - Petualangan Misteri Nadira & Habibi</p>
+        </div>
+        
+        <div class="plot-twist" id="plot-twist">
+            <h2 class="twist-title">PLOT TWIST!</h2>
+            <p class="twist-text" id="twist-text">Isi plot twist akan muncul di sini</p>
+            <button class="reveal-btn" id="reveal-btn">Lihat Kesimpulan</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            currentScene: 0,
+            collectedEvidence: [],
+            progress: 0,
+            killer: ""
+        };
+
+        // Game scenes
+        const scenes = [
+            {
+                text: "<span class='highlight'>Nadira & Habibi</span> sedang berada di perpustakaan sekolah ketika terdengar teriakan memilukan dari ruang guru. Mereka segera berlari ke sana...",
+                choices: [
+                    { text: "Masuk ke ruang guru", nextScene: 1 },
+                    { text: "Cari bantuan dulu", nextScene: 2 }
+                ]
+            },
+            {
+                text: "Di ruang guru, kalian menemukan tubuh <span class='highlight'>Pak Arif</span> terbaring tak bernyawa. Ada luka tusuk di dadanya. Bau parfum yang kuat tercium di udara...",
+                choices: [
+                    { text: "Periksa tubuh Pak Arif", nextScene: 3 },
+                    { text: "Cari petunjuk di sekitar", nextScene: 4 }
+                ],
+                evidence: "Pisau dapur dengan sidik jari yang terhapus sebagian"
+            },
+            {
+                text: "Kalian memutuskan mencari kepala sekolah tapi dia sedang tidak ada. Sementara itu, <span class='highlight'>Bu Rina</span> muncul dengan wajah pucat dan berkata, 'Aku melihat seseorang lari dari sini tadi!'",
+                choices: [
+                    { text: "Tanya deskripsi pelaku", nextScene: 5 },
+                    { text: "Curigai Bu Rina", nextScene: 6 }
+                ]
+            },
+            {
+                text: "Di saku jas Pak Arif, kalian menemukan <span class='highlight'>surat ancaman</span> yang bertuliskan: 'Berhenti menyelidiki masa laluku atau kau akan menyesal!'",
+                choices: [
+                    { text: "Selidiki masa lalu Pak Arif", nextScene: 7 },
+                    { text: "Fokus pada bukti fisik", nextScene: 8 }
+                ],
+                evidence: "Surat ancaman untuk Pak Arif"
+            },
+            {
+                text: "Di dekat jendela, kalian menemukan <span class='highlight'>kancing baju</span> unik yang tidak biasa dipakai guru. Juga ada jejak tanah basah...",
+                choices: [
+                    { text: "Periksa kancing baju", nextScene: 9 },
+                    { text: "Ikuti jejak tanah", nextScene: 10 }
+                ],
+                evidence: "Kancing baju berlogo klub eksklusif"
+            },
+            {
+                text: "Bu Rina menggambarkan pelakunya sebagai pria tinggi memakai topi. Tapi kalian curiga karena dia terlihat gugup. Bau parfumnya mirip dengan yang tercium di TKP...",
+                choices: [
+                    { text: "Konfrontasi Bu Rina", nextScene: 11 },
+                    { text: "Cari pria bertopi", nextScene: 12 }
+                ]
+            },
+            {
+                text: "Kalian menuduh Bu Rina terlibat. Dia marah dan berkata, 'Pak Arif punya banyak musuh! Tanya saja pada <span class='highlight'>Pak Budi</span> penjaga sekolah, atau <span class='highlight'>Andi</span> yang sering dihukum!'",
+                choices: [
+                    { text: "Temui Pak Budi", nextScene: 13 },
+                    { text: "Cari Andi", nextScene: 14 }
+                ]
+            },
+            {
+                text: "Kalian menemukan bahwa Pak Arif pernah menjadi penyelidik kasus korupsi 10 tahun lalu. Salah satu tersangka adalah <span class='highlight'>keluarga Bu Rina</span>...",
+                choices: [
+                    { text: "Konfrontasi Bu Rina", nextScene: 15 },
+                    { text: "Cari arsip kasus korupsi", nextScene: 16 }
+                ],
+                evidence: "Kliping koran tentang kasus korupsi"
+            },
+            {
+                text: "Jejak tanah mengarah ke gudang olahraga. Di dalam, kalian menemukan <span class='highlight'>seragam kotor</span> dan sepatu berlumpur...",
+                choices: [
+                    { text: "Periksa seragam", nextScene: 17 },
+                    { text: "Cari pemilik seragam", nextScene: 18 }
+                ],
+                evidence: "Seragam olahraga kotor ukuran besar"
+            },
+            {
+                text: "Kancing baju itu berasal dari seragam <span class='highlight'>klub golf eksklusif</span>. Hanya beberapa orang di sekolah yang menjadi anggotanya, termasuk Pak Budi dan Pak Arif sendiri...",
+                choices: [
+                    { text: "Periksa seragam Pak Budi", nextScene: 19 },
+                    { text: "Periksa lemari Pak Arif", nextScene: 20 }
+                ]
+            },
+            {
+                text: "Kalian menemukan <span class='highlight'>Pak Budi</span> sedang membersihkan gudang. Matanya merah seperti baru menangis. 'Pak Arif adalah teman baikku,' katanya.",
+                choices: [
+                    { text: "Tanya alibinya", nextScene: 21 },
+                    { text: "Perhatikan tangannya", nextScene: 22 }
+                ]
+            },
+            {
+                text: "Kalian menuduh Bu Rina. Tiba-tiba dia menangis dan berkata, 'Aku tidak membunuhnya! Tapi... aku tahu siapa yang melakukannya.'",
+                choices: [
+                    { text: "Desak untuk memberi tahu", nextScene: 23 },
+                    { text: "Tanya motivasinya", nextScene: 24 }
+                ]
+            },
+            {
+                text: "Di kantin, kalian menemukan <span class='highlight'>Andi</span> sedang makan sendirian. Dia terkejut mendengar berita kematian Pak Arif.",
+                choices: [
+                    { text: "Tanya alibinya", nextScene: 25 },
+                    { text: "Periksa tangannya", nextScene: 26 }
+                ]
+            },
+            {
+                text: "Pak Budi menunjukkan cedera di tangannya. 'Ini karena membersihkan gudang tadi pagi,' katanya. Tapi lukanya terlihat baru...",
+                choices: [
+                    { text: "Tanya lebih lanjut", nextScene: 27 },
+                    { text: "Cek alat kebersihan", nextScene: 28 }
+                ]
+            },
+            {
+                text: "Andi terlihat gugup. 'Aku benci Pak Arif karena selalu menghukumku, tapi aku tidak membunuhnya! Aku sedang di kantin bersama teman-teman.'",
+                choices: [
+                    { text: "Periksa alibi", nextScene: 29 },
+                    { text: "Tanya tentang kancing baju", nextScene: 30 }
+                ]
+            },
+            {
+                text: "Bu Rina akhirnya mengaku: 'Pak Arif menemukan rahasia kelamku. Aku pernah melakukan kesalahan besar di masa lalu. Tapi aku tidak membunuhnya!'",
+                choices: [
+                    { text: "Tanya rahasia apa", nextScene: 31 },
+                    { text: "Tanya siapa pembunuhnya", nextScene: 32 }
+                ]
+            },
+            {
+                text: "Di arsip sekolah, kalian menemukan foto lama yang mengejutkan: Pak Arif muda berdampingan dengan <span class='highlight'>Bu Rina dan seorang bayi</span>...",
+                choices: [
+                    { text: "Konfrontasi Bu Rina", nextScene: 33 },
+                    { text: "Tanya Pak Budi", nextScene: 34 }
+                ],
+                evidence: "Foto lama Pak Arif dan Bu Rina"
+            },
+            {
+                text: "Kalian menemukan <span class='highlight'>nama 'Andi'</span> disulam di seragam itu. Tapi Andi menyangkal, 'Itu bukan seragamku! Ukurannya terlalu besar.'",
+                choices: [
+                    { text: "Percaya Andi", nextScene: 35 },
+                    { text: "Tidak percaya", nextScene: 36 }
+                ],
+                evidence: "Seragam olahraga dengan nama 'Andi'"
+            },
+            {
+                text: "Pak Budi terlihat gugup saat kalian tanya tentang seragam. 'Mungkin itu milik Pak Arif. Dia kadang ikut latihan.'",
+                choices: [
+                    { text: "Periksa lemari Pak Arif", nextScene: 37 },
+                    { text: "Cek ukuran seragam", nextScene: 38 }
+                ]
+            },
+            {
+                text: "Seragam di lemari Pak Arif semua bersih dan rapi. Tidak ada yang kotor. Tapi ukuran seragam yang ditemukan lebih besar dari ukuran Pak Arif...",
+                choices: [
+                    { text: "Tanya ke Bu Rina", nextScene: 39 },
+                    { text: "Konfrontasi Pak Budi", nextScene: 40 }
+                ]
+            },
+            {
+                text: "Pak Budi tidak memiliki cedera di tangannya saat membersihkan pagi itu. Beberapa siswa melihatnya tanpa cedera sampai siang hari...",
+                choices: [
+                    { text: "Konfrontasi Pak Budi", nextScene: 41 },
+                    { text: "Hubungi polisi", nextScene: 42 }
+                ],
+                evidence: "Kesaksian siswa tentang tangan Pak Budi"
+            },
+            {
+                text: "Teman Andi mengkonfirmasi alibinya. Tapi salah satu dari mereka terlihat ragu...",
+                choices: [
+                    { text: "Desak teman Andi", nextScene: 43 },
+                    { text: "Periksa lagi bukti", nextScene: 44 }
+                ]
+            },
+            {
+                text: "Bu Rina berbisik, 'Lihat saja ke <span class='highlight'>gudang alat olahraga</span>. Jawabannya ada di sana.'",
+                choices: [
+                    { text: "Periksa gudang olahraga", nextScene: 45 },
+                    { text: "Tanya maksudnya", nextScene: 46 }
+                ]
+            },
+            {
+                text: "Bu Rina mengungkapkan rahasia mengejutkan: <span class='highlight'>Andi adalah anak kandungnya dan Pak Arif</span>! Tapi Pak Arif tidak mau mengakuinya.",
+                choices: [
+                    { text: "Cari Andi", nextScene: 47 },
+                    { text: "Cari Pak Arif", nextScene: 48 }
+                ],
+                evidence: "Rahasia keluarga Bu Rina"
+            },
+            {
+                text: "Di gudang olahraga, kalian menemukan <span class='highlight'>sebuah buku harian</span> milik Pak Arif yang tersembunyi di balik lemari...",
+                choices: [
+                    { text: "Baca buku harian", nextScene: 49 },
+                    { text: "Bawa ke polisi", nextScene: 50 }
+                ],
+                evidence: "Buku harian Pak Arif"
+            }
+        ];
+
+        // Final scenes and plot twist
+        const finalScenes = {
+            49: {
+                text: "Buku harian itu mengungkapkan bahwa Pak Arif mengetahui <span class='highlight'>Pak Budi terlibat pencurian dana sekolah</span>. Dia berencana melaporkannya hari ini...",
+                twist: "Pak Budi",
+                twistText: "Pak Budi adalah pembunuhnya! Ternyata dia telah mencuri dana sekolah selama bertahun-tahun. Ketika Pak Arif mengancam akan membongkar aksinya, Pak Budi membunuhnya untuk menutupi kejahatannya."
+            },
+            33: {
+                text: "Bu Rina terpatahkan melihat foto itu. 'Ya, Andi adalah anak kami. Tapi Pak Arif tidak pernah mau mengakuinya secara publik.'",
+                twist: "Andi",
+                twistText: "Andi adalah pembunuhnya! Ternyata dia muak menjadi anak haram. Ketika Pak Arif menolak mengakuinya sebagai anak, Andi yang emosional menusuknya dalam kemarahan."
+            },
+            46: {
+                text: "Bu Rina menjelaskan bahwa Pak Budi menyimpan <span class='highlight'>barang bukti</span> di gudang. Tapi ketika kalian pergi, dia tersenyum sinis...",
+                twist: "Bu Rina",
+                twistText: "Bu Rina adalah pembunuhnya! Ternyata dia menyimpan dendam karena Pak Arif tidak mau mengakui Andi sebagai anaknya. Dengan licik, dia mencoba mengalihkan tuduhan ke Pak Budi dan Andi."
+            }
+        };
+
+        // DOM elements
+        const dialogueElement = document.getElementById('dialogue');
+        const choicesElement = document.getElementById('choices');
+        const evidenceListElement = document.getElementById('evidence-list');
+        const plotTwistElement = document.getElementById('plot-twist');
+        const twistTextElement = document.getElementById('twist-text');
+        const revealButton = document.getElementById('reveal-btn');
+        const progressElement = document.getElementById('progress');
+
+        // Initialize game
+        function initGame() {
+            gameState.currentScene = 0;
+            gameState.collectedEvidence = [];
+            gameState.progress = 0;
+            gameState.killer = "";
+            updateGame();
+        }
+
+        // Update game display
+        function updateGame() {
+            const scene = scenes[gameState.currentScene];
+            
+            // Update dialogue
+            dialogueElement.innerHTML = scene.text;
+            
+            // Update choices
+            choicesElement.innerHTML = '';
+            scene.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.innerHTML = choice.text;
+                button.onclick = () => selectChoice(choice.nextScene);
+                choicesElement.appendChild(button);
+            });
+            
+            // Update evidence
+            updateEvidenceDisplay();
+            
+            // Update progress
+            gameState.progress = (gameState.currentScene / scenes.length) * 100;
+            progressElement.style.width = `${gameState.progress}%`;
+        }
+
+        // Update evidence display
+        function updateEvidenceDisplay() {
+            evidenceListElement.innerHTML = '';
+            
+            if (gameState.collectedEvidence.length === 0) {
+                const item = document.createElement('li');
+                item.className = 'evidence-item';
+                item.textContent = 'Tidak ada bukti yang dikumpulkan';
+                evidenceListElement.appendChild(item);
+                return;
+            }
+            
+            gameState.collectedEvidence.forEach(evidence => {
+                const item = document.createElement('li');
+                item.className = 'evidence-item';
+                item.textContent = evidence;
+                evidenceListElement.appendChild(item);
+            });
+        }
+
+        // Handle player choice
+        function selectChoice(nextSceneIndex) {
+            const currentScene = scenes[gameState.currentScene];
+            
+            // Add evidence if available
+            if (currentScene.evidence && !gameState.collectedEvidence.includes(currentScene.evidence)) {
+                gameState.collectedEvidence.push(currentScene.evidence);
+            }
+            
+            // Check if this is a final scene
+            if (finalScenes[gameState.currentScene]) {
+                gameState.killer = finalScenes[gameState.currentScene].twist;
+                showPlotTwist(finalScenes[gameState.currentScene].twistText);
+                return;
+            }
+            
+            // Move to next scene
+            gameState.currentScene = nextSceneIndex;
+            
+            // Check if game is over
+            if (gameState.currentScene >= scenes.length) {
+                gameState.currentScene = scenes.length - 1;
+                showPlotTwist("Maaf, kamu belum menemukan pembunuhnya. Coba lagi dan kumpulkan lebih banyak bukti!");
+                return;
+            }
+            
+            updateGame();
+        }
+
+        // Show plot twist
+        function showPlotTwist(text) {
+            twistTextElement.innerHTML = text;
+            plotTwistElement.classList.add('active');
+        }
+
+        // Set up reveal button
+        revealButton.onclick = () => {
+            plotTwistElement.classList.remove('active');
+            // Add a delay before restarting to allow the animation to complete
+            setTimeout(() => {
+                initGame();
+            }, 500);
+        };
+
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>
